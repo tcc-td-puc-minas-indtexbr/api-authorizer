@@ -31,7 +31,9 @@ class AppTestCase(BaseUnitTestCase):
         self.logger.info('Running test: %s', get_function_name(__name__))
         lambda_context = FakeLambdaContext()
         auth_response_dict = app.auth(event=event, context=lambda_context)
-        response_body = auth_response_dict['policyDocument']
+        # print(auth_response_dict)
+        # response_body = auth_response_dict['policyDocument']
+        response_body = auth_response_dict
 
         # self.assertIsInstance(response, chalice.app.Response)
         # response_dict = response.to_dict()

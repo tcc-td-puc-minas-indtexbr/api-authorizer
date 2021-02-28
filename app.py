@@ -76,7 +76,7 @@ def auth(event, context):
 
     get_logger().info("auth_response_dict: {}".format(auth_response_dict))
 
-    return auth_response_dict
+    return auth_response_dict['policyDocument']
     # return http_helper.create_response(auth_response_dict['policyDocument'], status_code=200)
 
 # only for development
