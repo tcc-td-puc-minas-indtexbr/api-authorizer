@@ -27,10 +27,10 @@ def get_api_auth_event_sample_raw():
 class AppTestCase(BaseUnitTestCase):
 
     @data_provider(get_api_auth_event_sample_raw)
-    def test_auth(self, event, routes_allowed_is_empty):
+    def test_auth_token(self, event, routes_allowed_is_empty):
         self.logger.info('Running test: %s', get_function_name(__name__))
         lambda_context = FakeLambdaContext()
-        auth_response_dict = app.auth(event=event, context=lambda_context)
+        auth_response_dict = app.auth_token(event=event, context=lambda_context)
         # print(auth_response_dict)
         response_body = auth_response_dict['policyDocument']
         # response_body = auth_response_dict

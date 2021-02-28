@@ -30,11 +30,11 @@ AWS_REGION = os.environ['AWS_REGION'] if 'AWS_REGION' in os.environ else None
 AWS_ACCOUNT_ID = os.environ['AWS_ACCOUNT_ID'] if 'AWS_ACCOUNT_ID' in os.environ else None
 AWS_ACCOUNT_ID = os.environ['AWS_ACCOUNT_ID'] if 'AWS_ACCOUNT_ID' in os.environ else None
 
-app = Chalice(app_name=APP_NAME)
+app = Chalice(app_name=APP_NAME, debug=helper.debug_mode())
 
 
 @app.lambda_function()
-def auth(event, context):
+def auth_token(event, context):
     auth_type = 'TOKEN'
     token = None
     method_arn = ''
@@ -77,8 +77,13 @@ def auth(event, context):
     get_logger().info("auth_response_dict: {}".format(auth_response_dict))
 
     return auth_response_dict
-    # return auth_response_dict['policyDocument']
-    # return http_helper.create_response(auth_response_dict['policyDocument'], status_code=200)
+
+@app.lambda_function()
+def auth_request(event, context):
+    get_logger().info("Event: {}".format(event))
+
+    return None
+
 
 # only for development
 # @app.route('/')
