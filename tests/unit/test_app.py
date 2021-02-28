@@ -30,12 +30,11 @@ class AppTestCase(BaseUnitTestCase):
     def test_auth(self, event, routes_allowed_is_empty):
         self.logger.info('Running test: %s', get_function_name(__name__))
         lambda_context = FakeLambdaContext()
-        response = app.auth(event=event, context=lambda_context)
+        auth_response_dict = app.auth(event=event, context=lambda_context)
+        response_body = auth_response_dict['policyDocument']
 
-        self.assertIsInstance(response, chalice.app.Response)
-
-        response_dict = response.to_dict()
-        response_body = json.loads(response_dict['body'])
+        # self.assertIsInstance(response, chalice.app.Response)
+        # response_dict = response.to_dict()
 
         self.assertTrue("Version" in response_body)
         self.assertTrue("Statement" in response_body)

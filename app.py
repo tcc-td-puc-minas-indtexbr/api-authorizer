@@ -1,8 +1,11 @@
+import json
 import os
 
 from chalicelib.boot import register_vendor
 
 # execute before other codes of app
+from chalicelib.logging import get_logger
+
 register_vendor()
 
 from chalice import Chalice
@@ -36,6 +39,7 @@ def auth(event, context):
     token = None
     method_arn = ''
     principal_id = 'app'
+    access_allowed = False
 
     if 'type' in event:
         auth_type = event['type']
@@ -49,6 +53,8 @@ def auth(event, context):
     # if TOKEN_KEY.lower() in app.current_request.headers:
     #     token = app.current_request.headers[TOKEN_KEY.lower()]
 
+    get_logger().info("Event: {}".format(event))
+
     auth_request = AuthRequest(auth_type=auth_type, token=token, method_arn=method_arn)
     auth_response = AuthResponse(routes=[], principal_id=principal_id)
 
@@ -58,10 +64,20 @@ def auth(event, context):
             auth_response = AuthResponse(routes=[
                 AuthRoute('/', AuthResponse.ALL_HTTP_METHODS)
             ], principal_id=principal_id)
+            access_allowed = True
 
     auth_response_dict = auth_response.to_dict(auth_request)
 
-    return http_helper.create_response(auth_response_dict['policyDocument'], status_code=200)
+    if not access_allowed:
+        policies = auth_response_dict['policyDocument']
+        statements = policies['Statement']
+        for k,v in enumerate(statements):
+            statements[k]['Effect'] = DENY
+
+    get_logger().info("auth_response_dict: {}".format(auth_response_dict))
+
+    return auth_response_dict
+    # return http_helper.create_response(auth_response_dict['policyDocument'], status_code=200)
 
 # only for development
 # @app.route('/')

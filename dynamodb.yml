@@ -1,0 +1,20 @@
+Outputs:
+  AuthorizerTableName:
+    Value:
+      Ref: AuthorizerTable
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Sigo API Authorizer Table'
+Resources:
+  AuthorizerTable:
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: uuid
+        AttributeType: S
+      KeySchema:
+      - AttributeName: uuid
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+    Type: AWS::DynamoDB::Table
