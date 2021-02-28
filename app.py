@@ -62,7 +62,8 @@ def auth_token(event, context):
         if token == v:
             principal_id = k
             auth_response = AuthResponse(routes=[
-                AuthRoute('/', AuthResponse.ALL_HTTP_METHODS)
+                method_arn
+                # AuthRoute('/', AuthResponse.ALL_HTTP_METHODS)
             ], principal_id=principal_id)
             access_allowed = True
 
