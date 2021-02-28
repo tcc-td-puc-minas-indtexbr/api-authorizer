@@ -1,0 +1,12 @@
+version: 0.0
+Resources:
+  - MyFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        Name: "api-authorizer"
+        Alias: "production"
+        CurrentVersion: "1"
+        TargetVersion: "1"
+#Hooks:
+#  - BeforeAllowTraffic: "LambdaFunctionToValidateBeforeTrafficShift"
+#  - AfterAllowTraffic: "LambdaFunctionToValidateAfterTrafficShift"
