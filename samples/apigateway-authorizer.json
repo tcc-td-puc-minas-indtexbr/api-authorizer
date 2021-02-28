@@ -1,0 +1,5 @@
+{
+        "type": "TOKEN",
+        "authorizationToken": "incoming-client-token",
+        "methodArn": "arn:aws:execute-api:sa-east-1:123456789012:zp8i9o3hna/api/GET/{proxy+}"
+    }

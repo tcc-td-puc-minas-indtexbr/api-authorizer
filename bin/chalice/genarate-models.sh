@@ -1,0 +1,1 @@
+chalice generate-models > ./public/swagger/openapi.json

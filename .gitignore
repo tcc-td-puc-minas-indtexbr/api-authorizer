@@ -1,0 +1,35 @@
+.idea
+venv
+/db.sqlite3
+*.pyc
+*/**/__pycache__/*
+/.env
+
+/.infrestructure/dist/deployment.zip
+/.infrestructure/.terraform/
+/.infrastructure/.terraform.lock.hcl
+/.infrastructure/terraform.tfstate
+/.infrastructure/terraform.tfstate.backup
+/.infrastructure/plan.json
+/plan.json
+/plan.json.binary
+/docker/elk/logs/elasticsearch.log
+/.infrastructure/.terraform/
+/.chalice/deployments/
+/target/
+/target/dynamodb-local/
+*_us-east-2.db
+*_sa-east-1.db
+/docker/aws/credentials
+/deployment.zip
+/sam.json
+/.coverage
+
+# mantem a vendor
+!vendor
+# ignora os demais arquivos
+vendor/*
+# mantem essa pasta
+!/vendor/public
+# mantem essa pasta
+!/vendor/datasources
