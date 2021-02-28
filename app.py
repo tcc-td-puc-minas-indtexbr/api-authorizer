@@ -39,6 +39,11 @@ def auth_token(event, context):
     token = None
     method_arn = ''
     principal_id = 'user'
+    api_gateway_arn_tmp = ''
+    aws_account_Id = ''
+    rest_api_id = ''
+    region = ''
+    stage = ''
     access_allowed = False
 
     if 'type' in event:
@@ -46,6 +51,12 @@ def auth_token(event, context):
 
     if 'methodArn' in event:
         method_arn = event['methodArn']
+        tmp = event['methodArn'].split(':')
+        api_gateway_arn_tmp = tmp[5].split('/')
+        aws_account_Id = tmp[4]
+        rest_api_id = api_gateway_arn_tmp[0]
+        region = api_gateway_arn_tmp[3]
+        stage = api_gateway_arn_tmp[1]
 
     if 'authorizationToken' in event:
         token = event['authorizationToken']
@@ -60,10 +71,20 @@ def auth_token(event, context):
 
     for k, v in ALLOWED_APPS.items():
         if token == v:
-            # nao sobrescrever
-            # principal_id = k
+            verb = '*'
+            resource = '*'
+
+            resource_arn = ("arn:aws:execute-api:" +
+                           region + ":" +
+                           aws_account_Id + ":" +
+                           rest_api_id + "/" +
+                           stage + "/" +
+                           verb + "/" +
+                           resource)
+
             auth_response = AuthResponse(routes=[
-                method_arn
+                method_arn,
+                resource_arn
                 # AuthRoute('/', AuthResponse.ALL_HTTP_METHODS)
             ], principal_id=principal_id)
             access_allowed = True
@@ -73,8 +94,16 @@ def auth_token(event, context):
     if not access_allowed:
         policies = auth_response_dict['policyDocument']
         statements = policies['Statement']
-        for k,v in enumerate(statements):
+        for k, v in enumerate(statements):
             statements[k]['Effect'] = DENY
+
+
+    # new! -- add additional key-value pairs associated with the authenticated principal
+    # these are made available by APIGW like so: $context.authorizer.<key>
+    # additional context is cached
+    auth_response_dict['context'] = {
+        'key': token  # $context.authorizer.key -> value
+    }
 
     get_logger().info("auth_response_dict: {}".format(auth_response_dict))
 
