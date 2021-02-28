@@ -38,7 +38,7 @@ def auth_token(event, context):
     auth_type = 'TOKEN'
     token = None
     method_arn = ''
-    principal_id = 'app'
+    principal_id = 'user'
     access_allowed = False
 
     if 'type' in event:
@@ -60,7 +60,8 @@ def auth_token(event, context):
 
     for k, v in ALLOWED_APPS.items():
         if token == v:
-            principal_id = k
+            # nao sobrescrever
+            # principal_id = k
             auth_response = AuthResponse(routes=[
                 method_arn
                 # AuthRoute('/', AuthResponse.ALL_HTTP_METHODS)
