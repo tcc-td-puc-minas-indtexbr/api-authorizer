@@ -21,7 +21,14 @@ def get_api_auth_event_sample_raw():
         "authorizationToken": ALLOWED_APPS["sigo-frontend"],
         "methodArn": "arn:aws:execute-api:sa-east-1:123456789012:zp8i9o3hna/api/GET/{proxy+}"
     }
-    return (auth_event1, False), (auth_event2, True)
+    auth_event3 = {
+        "type": "TOKEN",
+        "authorizationToken": ALLOWED_APPS["sigo-frontend"],
+        "methodArn": "arn:aws:execute-api:sa-east-1:123456789012:zp8i9o3hna/api/GET/feed"
+    }
+
+    # return (auth_event1, False), (auth_event2, True), (auth_event3, True)
+    return (auth_event3, True),
 
 
 class AppTestCase(BaseUnitTestCase):

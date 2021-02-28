@@ -42,6 +42,7 @@ def auth_token(event, context):
     api_gateway_arn_tmp = ''
     aws_account_Id = ''
     rest_api_id = ''
+    rest_api_resource = ''
     region = ''
     stage = ''
     access_allowed = False
@@ -57,6 +58,7 @@ def auth_token(event, context):
         rest_api_id = api_gateway_arn_tmp[0]
         region = api_gateway_arn_tmp[3]
         stage = api_gateway_arn_tmp[1]
+        rest_api_resource = tmp[5]
 
     if 'authorizationToken' in event:
         token = event['authorizationToken']
@@ -71,21 +73,11 @@ def auth_token(event, context):
 
     for k, v in ALLOWED_APPS.items():
         if token == v:
-            verb = '*'
-            resource = '*'
-
-            resource_arn = ("arn:aws:execute-api:" +
-                           region + ":" +
-                           aws_account_Id + ":" +
-                           rest_api_id + "/" +
-                           stage + "/" +
-                           verb + "/" +
-                           resource)
+            verb = api_gateway_arn_tmp[2] if len(api_gateway_arn_tmp) > 2 else '*'
+            resource = api_gateway_arn_tmp[3] if len(api_gateway_arn_tmp) > 3 else '*'
 
             auth_response = AuthResponse(routes=[
-                method_arn,
-                resource_arn
-                # AuthRoute('/', AuthResponse.ALL_HTTP_METHODS)
+                AuthRoute("/" + resource, [verb])
             ], principal_id=principal_id)
             access_allowed = True
 
