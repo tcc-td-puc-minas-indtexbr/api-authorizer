@@ -19,7 +19,7 @@
       },
       "environment_variables": {
         "APP_ENV": "production",
-        "DEBUG": "false",
+        "DEBUG": "true",
         "LOG_LEVEL": "info"
       },
       "tags": {
@@ -36,7 +36,7 @@
       },
       "environment_variables": {
         "APP_ENV": "staging",
-        "DEBUG": "false",
+        "DEBUG": "true",
         "LOG_LEVEL": "info"
       },
       "tags": {
