@@ -32,8 +32,8 @@ class AppTestCase(BaseUnitTestCase):
         lambda_context = FakeLambdaContext()
         auth_response_dict = app.auth(event=event, context=lambda_context)
         # print(auth_response_dict)
-        # response_body = auth_response_dict['policyDocument']
-        response_body = auth_response_dict
+        response_body = auth_response_dict['policyDocument']
+        # response_body = auth_response_dict
 
         # self.assertIsInstance(response, chalice.app.Response)
         # response_dict = response.to_dict()
