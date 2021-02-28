@@ -9,7 +9,7 @@ from chalicelib.logging import get_logger
 register_vendor()
 
 from chalice import Chalice
-from chalice.app import AuthResponse, AuthRoute
+from chalice.app import AuthResponse, AuthRoute, CognitoUserPoolAuthorizer
 from chalice.app import AuthRequest
 from chalicelib import APP_NAME, http_helper, helper
 
@@ -105,7 +105,75 @@ def auth_token(event, context):
 def auth_request(event, context):
     get_logger().info("Event: {}".format(event))
 
-    return None
+    auth_type = None
+    method_arn = None
+    token = None
+    auth = None
+    aws_account_Id = ''
+    rest_api_id = ''
+    rest_api_resource = ''
+    region = ''
+    stage = ''
+
+    api_gateway_arn_tmp = ''
+    principal_id = 'user'
+
+    if 'type' in event:
+        auth_type = event['type']
+
+    if 'methodArn' in event:
+        method_arn = event['methodArn']
+        tmp = event['methodArn'].split(':')
+        api_gateway_arn_tmp = tmp[5].split('/')
+        aws_account_Id = tmp[4]
+        rest_api_id = api_gateway_arn_tmp[0]
+        region = api_gateway_arn_tmp[3]
+        stage = api_gateway_arn_tmp[1]
+        rest_api_resource = tmp[5]
+
+    if TOKEN_KEY in event:
+        token = event[TOKEN_KEY]
+
+    if 'Authorization' in event:
+       auth = event['Authorization']
+
+    auth_request = AuthRequest(auth_type=auth_type, token=token, method_arn=method_arn)
+    auth_response = AuthResponse(routes=[], principal_id=principal_id)
+
+
+    # TOKEN validation
+    for k, v in ALLOWED_APPS.items():
+        if token == v:
+            verb = api_gateway_arn_tmp[2] if len(api_gateway_arn_tmp) > 2 else '*'
+            resource = api_gateway_arn_tmp[3] if len(api_gateway_arn_tmp) > 3 else '*'
+
+            auth_response = AuthResponse(routes=[
+                AuthRoute("/" + resource, [verb])
+            ], principal_id=principal_id)
+            access_allowed = True
+
+    auth_response_dict = auth_response.to_dict(auth_request)
+
+    # USer Validation
+    authorizer = CognitoUserPoolAuthorizer(
+        'indtexbr-pool', provider_arns=['arn:aws:cognito-idp:us-east-1:'+aws_account_Id+':userpool/us-east-1_L7kAaHw2T'])
+
+    if not access_allowed:
+        policies = auth_response_dict['policyDocument']
+        statements = policies['Statement']
+        for k, v in enumerate(statements):
+            statements[k]['Effect'] = DENY
+
+    # new! -- add additional key-value pairs associated with the authenticated principal
+    # these are made available by APIGW like so: $context.authorizer.<key>
+    # additional context is cached
+    auth_response_dict['context'] = {
+        'key': token  # $context.authorizer.key -> value
+    }
+
+    get_logger().info("auth_response_dict: {}".format(auth_response_dict))
+
+    return auth_response_dict
 
 
 # only for development
