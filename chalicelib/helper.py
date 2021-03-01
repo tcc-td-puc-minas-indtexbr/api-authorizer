@@ -6,6 +6,7 @@ from enum import Enum
 
 import pytz
 
+from chalicelib.boot import ROOT_DIR
 from chalicelib.logging import get_logger
 
 TZ_AMERICA_SAO_PAULO = 'America/Sao_Paulo'
@@ -14,7 +15,7 @@ TZ_AMERICA_SAO_PAULO = 'America/Sao_Paulo'
 def open_vendor_file(filename, mode):
     directories = [
         '.',
-        './vendor',
+        ROOT_DIR + '/vendor',
         '/opt/python/lib/python%s.%s/site-packages' % sys.version_info[:2]
     ]
     for dirname in directories:

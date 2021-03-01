@@ -20,7 +20,10 @@
       "environment_variables": {
         "APP_ENV": "production",
         "DEBUG": "true",
-        "LOG_LEVEL": "info"
+        "LOG_LEVEL": "info",
+        "AWS_POOL_ARN": "arn:aws:cognito-idp:us-east-1:${AWS::AccountId}:userpool/us-east-1_L7kAaHw2T",
+        "AWS_POOL_ID": "us-east-1_L7kAaHw2T",
+        "AWS_POLL_CLIENT_ID": "37ki8l652u64cpq6elir2rr5v9"
       },
       "tags": {
         "Env": "production"
@@ -37,7 +40,10 @@
       "environment_variables": {
         "APP_ENV": "staging",
         "DEBUG": "true",
-        "LOG_LEVEL": "info"
+        "LOG_LEVEL": "info",
+        "AWS_POOL_ARN": "arn:aws:cognito-idp:us-east-1:${AWS::AccountId}:userpool/us-east-1_L7kAaHw2T",
+        "AWS_POOL_ID": "us-east-1_L7kAaHw2T",
+        "AWS_POLL_CLIENT_ID": "37ki8l652u64cpq6elir2rr5v9"
       },
       "tags": {
         "Env": "staging"
@@ -54,7 +60,11 @@
       "environment_variables": {
         "APP_ENV": "development",
         "DEBUG": "true",
-        "LOG_LEVEL": "info"
+        "LOG_LEVEL": "info",
+        "AWS_POOL_ARN": "arn:aws:cognito-idp:us-east-1:${AWS::AccountId}:userpool/us-east-1_L7kAaHw2T",
+        "AWS_POOL_ID": "us-east-1_L7kAaHw2T",
+        "AWS_POLL_CLIENT_ID": "37ki8l652u64cpq6elir2rr5v9",
+        "AWS_PROFILE": "sigo-lambdas"
       }
     }
   }
