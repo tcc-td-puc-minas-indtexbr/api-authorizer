@@ -4,11 +4,10 @@ import unittest
 import chalice
 from unittest_data_provider import data_provider
 
-from chalicelib.services.v1.authenticator_service import AuthenticatorService
+from chalicelib.services.v1.authenticator_service import AuthenticatorService, ALLOWED_APPS
 from tests.unit.mocks.aws_lambda_mock import FakeLambdaContext
 from tests.unit.testutils import BaseUnitTestCase, get_function_name
 import app
-from app import ALLOWED_APPS
 
 
 def get_api_auth_event_sample_raw():

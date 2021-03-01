@@ -1,41 +1,13 @@
-import json
-import os
-
-import boto3
-from jose import jwt, jwk
-from jose.utils import base64url_decode
-
 from chalicelib.boot import register_vendor
 
 # execute before other codes of app
-from chalicelib.helper import open_vendor_file
 from chalicelib.logging import get_logger
 from chalicelib.services.v1.authenticator_service import AuthenticatorService
 
 register_vendor()
 
 from chalice import Chalice
-from chalice.app import AuthResponse, AuthRoute, CognitoUserPoolAuthorizer
-from chalice.app import AuthRequest
-from chalicelib import APP_NAME, http_helper, helper
-
-TOKEN_KEY = 'Authorization'
-API_KEY = 'X-API-KEY'
-ALLOW = 'Allow'
-DENY = 'Deny'
-
-# hashlib.sha224(b"standard_manager_api").hexdigest()
-ALLOWED_APPS = {
-    "sigo-frontend": "ba85c48ba5c054246a70c3cc8ca4094a87a687490bc695a13c2d321141578a94",
-    "standard-manager-api": "40f3d545af024219e77b18fe4fabb06c9d6ef12354cc82caadebf70cc66fd5e9",
-    "standard-update-checker": "2b93fc0a90c47d3385c21220ef9a69d976a38c8527fc06bbb1e06d9ae7e37dd4",
-    "consulting-manager-api": "0b739891df1281c7fc5a75885049b825ddffc7b3e23b5ff752b6ecb3a7962795",
-    "standard-rss-feed-simulator-api": "8f4a82353ec4789f76af116a5419de8f0adb047f5afbf4df4f280f1a4f705a61"
-}
-
-AWS_REGION = os.environ['AWS_REGION'] if 'AWS_REGION' in os.environ else None
-AWS_ACCOUNT_ID = os.environ['AWS_ACCOUNT_ID'] if 'AWS_ACCOUNT_ID' in os.environ else None
-AWS_ACCOUNT_ID = os.environ['AWS_ACCOUNT_ID'] if 'AWS_ACCOUNT_ID' in os.environ else None
+from chalicelib import APP_NAME, helper
 
 app = Chalice(app_name=APP_NAME, debug=helper.debug_mode())
 
