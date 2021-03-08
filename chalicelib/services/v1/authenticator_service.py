@@ -11,8 +11,10 @@ from jose.utils import base64url_decode
 from chalicelib.helper import open_vendor_file
 from chalicelib.logging import get_logger
 
+# TODO trocar por dados da tabela do banco de dados
 ALLOWED_APPS = {
     "sigo-frontend": "ba85c48ba5c054246a70c3cc8ca4094a87a687490bc695a13c2d321141578a94",
+    "standard-facade-api": "18dba4ea56a359b1d050dc72751d74907f4cb5e7c0128305626a58df3c6232be",
     "standard-manager-api": "40f3d545af024219e77b18fe4fabb06c9d6ef12354cc82caadebf70cc66fd5e9",
     "standard-update-checker": "2b93fc0a90c47d3385c21220ef9a69d976a38c8527fc06bbb1e06d9ae7e37dd4",
     "consulting-manager-api": "0b739891df1281c7fc5a75885049b825ddffc7b3e23b5ff752b6ecb3a7962795",
